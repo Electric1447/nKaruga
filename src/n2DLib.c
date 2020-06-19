@@ -16,19 +16,20 @@ extern "C" {
 unsigned short *BUFF_BASE_ADDRESS;
 SDL_Window *sdlWindow = NULL;
 SDL_Renderer *sdlRenderer = NULL;
+//SDL_GameController *sdlctrl = NULL;
 SDL_Texture *MAIN_SCREEN;
 
 Uint32 baseFPS;
 
 void initBuffering()
 {
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	
 	// This fixes the fullscreen/resize crash, see line 97
 	//SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	
 	//SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN, &sdlWindow, &sdlRenderer);
-	sdlWindow = SDL_CreateWindow("nKaruga", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
+	sdlWindow = SDL_CreateWindow("nKaruga", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
 	
 	SDL_RenderSetLogicalSize(sdlRenderer, 320, 240);
@@ -46,8 +47,25 @@ void initBuffering()
 	
 	baseFPS = SDL_GetTicks();
 	SDL_PumpEvents();
-	G_keys = SDL_GetKeyboardState(NULL);
+	/*
+	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+		if (SDL_IsGameController(i)) {
+			sdlctrl = SDL_GameControllerOpen(i);
+			if (sdlctrl)
+				break;
+			else
+				fprintf(stderr, "Could not open gamecontroller %i: %s\n", i, SDL_GetError());
+		}
+	}
+	*/
+	//G_keys = SDL_GetKeyboardState(NULL);
 }
+/*
+Uint8 isKeyPressed2(SDL_GameControllerButton button)
+{
+	return SDL_GameControllerGetButton(sdlctrl, button);
+}
+*/
 /*
 void toggleFullscreen()
 {
@@ -111,15 +129,17 @@ void updateScreen()
 	
 	SDL_RenderCopy(sdlRenderer, MAIN_SCREEN, NULL, NULL);
 	SDL_RenderPresent(sdlRenderer);
-	updateKeys();
+	//updateKeys();
+	//SDL_GameControllerUpdate();
 }
-
+/*
 void updateKeys()
 {
 	SDL_PumpEvents();
-	G_keys = SDL_GetKeyboardState(NULL);
+	SDL_GameControllerUpdate();
+	//G_keys = SDL_GetKeyboardState(NULL);
 }
-
+*/
 void deinitBuffering()
 {
 	SDL_DestroyTexture(MAIN_SCREEN);
@@ -702,18 +722,44 @@ int stringWidth(const char* s)
  * Miscellaneous *
  *               */
 
-const t_key *G_keys;
-
-void wait_no_key_pressed(t_key k)
+//const t_key *G_keys;
+/*
+void wait_no_key_pressed(SDL_GameControllerButton k)
+{
+	while (k)
+	{
+		SDL_PumpEvents();
+		SDL_GameControllerUpdate();
+	}
+}
+*/
+/*void wait_no_key_pressed(t_key k)
 {
 	while (G_keys[k])
 	{
 		SDL_PumpEvents();
 		G_keys = SDL_GetKeyboardState(NULL);
 	}
-}
+}*/
+/*
+SDL_GameControllerButton get_key_pressed(SDL_GameControllerButton* all_buttons)
+{
+	int i;
+	
+	size_t btn_amount = sizeof(all_buttons) / sizeof(all_buttons[0]);
 
-int get_key_pressed(t_key* report)
+	
+	for(i = 0; i < btn_amount; i++)
+	{
+		if (isKeyPressed2(all_buttons[i]))
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+*/
+/*int get_key_pressed(t_key* report)
 {
 	int i;
 	for(i = 0; i < SDL_NUM_SCANCODES; i++)
@@ -725,12 +771,17 @@ int get_key_pressed(t_key* report)
 		}
 	}
 	return 0;
-}
-
- int isKey(t_key k1, t_key k2)
+}*/
+/*
+int isKey(SDL_GameControllerButton k1, SDL_GameControllerButton k2)
 {
 	return k1 == k2;
 }
+*/
+/*int isKey(t_key k1, t_key k2)
+{
+	return k1 == k2;
+}*/
 
 // Loads a 24-bits bitmap image into an n2DLib-compatible unsigned short* array
 unsigned short *loadBMP(const char *path, unsigned short transparency)

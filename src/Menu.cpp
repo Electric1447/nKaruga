@@ -54,7 +54,7 @@ Menu::~Menu()
 }
 
 // Preserves the buffer
-int Menu::run()
+int Menu::run(int button)
 {
 	bool pressed[3] = { false };
 	std::vector<int> x = std::vector<int>(num), y = std::vector<int>(num);
@@ -103,11 +103,13 @@ int Menu::run()
 
 		drawSprite(image_cursor, x[choice] - 7, y[choice], 0, 0);
 		updateScreen();
-		updateKeys();
+		//updateKeys();
 		drawSprite(image_cursor, x[choice] - 7, y[choice], 1, 0xffff);
 
 		// Let the user pick an option or fiddle with the values
-		if (isKeyPressed(G_downKey))
+		//if (isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+		//if (isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+		if (button & SCE_CTRL_DOWN)
 		{
 			if (!pressed[0] && choice < num - 1)
 			{
@@ -119,7 +121,8 @@ int Menu::run()
 		else
 			pressed[0] = false;
 		
-		if (isKeyPressed(G_upKey))
+		//if (isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
+		if (button & SCE_CTRL_UP)
 		{
 			if (!pressed[1] && choice > 0)
 			{
@@ -131,7 +134,8 @@ int Menu::run()
 		else
 			pressed[1] = false;
 
-		if (isKeyPressed(SDL_SCANCODE_RETURN))
+		//if (isKeyPressed(SDL_CONTROLLER_BUTTON_START))
+		if (button & SCE_CTRL_START)
 		{
 			if (!pressed[2])
 			{
@@ -146,7 +150,8 @@ int Menu::run()
 		else
 			pressed[2] = false;
 
-		if (isKeyPressed(SDL_SCANCODE_ESCAPE))
+		//if (isKeyPressed(SDL_CONTROLLER_BUTTON_LEFTSHOULDER))
+		if (button & SCE_CTRL_LTRIGGER)
 		{
 			Level::soundSystem->quickPlaySFX(sound_entries[SD_MENU_BACK]);
 			return -1;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "main.hpp"
 
 #include <psp2/kernel/processmgr.h>
 #include <psp2/power.h> 
@@ -13,6 +14,9 @@
 #define ENEMY_W(i) Level::enemiesArray->data[i].img[0]
 #define ENEMY_H(i) Level::enemiesArray->data[i].img[1]
 
+SceCtrlData pad;
+SharedData sharedData;
+
 int G_gpTimer;
 int G_minX = 0, G_maxX = 320;
 int G_skipFrame = 0;
@@ -25,7 +29,7 @@ int G_bossIntroChannel = -2;
 int G_difficulty = 1;
 bool G_usingArrows = false;
 
-t_key G_downKey, G_leftKey, G_rightKey, G_upKey, G_fireKey, G_polarityKey, G_fragmentKey, G_pauseKey;
+//t_key G_downKey, G_leftKey, G_rightKey, G_upKey, G_fireKey, G_polarityKey, G_fragmentKey, G_pauseKey;
 
 DrawingCandidates *DC;
 Particles *G_particles;
@@ -42,7 +46,7 @@ static unsigned short image_cursor[] = { 5, 8, 1,
 1, 0, 0, 1, 1,
 0, 0, 1, 1, 1
 };
-
+/*
 inline void writeKeyToConfig(FILE* out, t_key* key)
 {
 	fputc(*key, out);
@@ -51,14 +55,14 @@ inline void writeKeyToConfig(FILE* out, t_key* key)
 inline void readKeyFromConfig(FILE* in, t_key* key)
 {
 	*key = fgetc(in);
-}
+}*/
 
 inline void writeToConfig(FILE* out)
 {
-	writeKeyToConfig(out, &G_fireKey);
-	writeKeyToConfig(out, &G_polarityKey);
-	writeKeyToConfig(out, &G_fragmentKey);
-	writeKeyToConfig(out, &G_pauseKey);
+	//writeKeyToConfig(out, &G_fireKey);
+	//writeKeyToConfig(out, &G_polarityKey);
+	//writeKeyToConfig(out, &G_fragmentKey);
+	//writeKeyToConfig(out, &G_pauseKey);
 	fputc(G_difficulty, out);
 	fputc(G_usingArrows, out);
 	fputc(G_displayBg, out);
@@ -66,13 +70,13 @@ inline void writeToConfig(FILE* out)
 
 inline void readFromConfig(FILE* in)
 {
-	readKeyFromConfig(in, &G_fireKey);
-	readKeyFromConfig(in, &G_polarityKey);
-	readKeyFromConfig(in, &G_fragmentKey);
-	readKeyFromConfig(in, &G_pauseKey);
+	//readKeyFromConfig(in, &G_fireKey);
+	//readKeyFromConfig(in, &G_polarityKey);
+	//readKeyFromConfig(in, &G_fragmentKey);
+	//readKeyFromConfig(in, &G_pauseKey);
 	G_difficulty = fgetc(in);
 	G_usingArrows = !!fgetc(in);
-	if (G_usingArrows)
+	/*if (G_usingArrows)
 	{
 		G_downKey = SDL_SCANCODE_DOWN;
 		G_leftKey = SDL_SCANCODE_LEFT;
@@ -85,13 +89,12 @@ inline void readFromConfig(FILE* in)
 		G_leftKey = SDL_SCANCODE_A;
 		G_rightKey = SDL_SCANCODE_D;
 		G_upKey = SDL_SCANCODE_W;
-	}
+	}*/
 	G_displayBg = !!fgetc(in);
 }
 
 int main(int argc, char **argv)
 {
-	
 	scePowerSetArmClockFrequency(444);
     scePowerSetGpuClockFrequency(222);
     scePowerSetBusClockFrequency(222);
@@ -105,16 +108,17 @@ int main(int argc, char **argv)
 	G_usingArrows = false;
 	FILE* configFile;
 	// Custom keys vars
-	t_key* customKeys[KEYS_TO_BIND] = { &G_fireKey, &G_polarityKey, &G_fragmentKey, &G_pauseKey };
+	//t_key* customKeys[KEYS_TO_BIND] = { &G_fireKey, &G_polarityKey, &G_fragmentKey, &G_pauseKey };
+	//SDL_GameControllerButton customKeys[] = { SDL_CONTROLLER_BUTTON_A, SDL_CONTROLLER_BUTTON_X, SDL_CONTROLLER_BUTTON_Y, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER };
 	int choice = 0;
 	
 	configFile = fopen(string_nKaruga_config, "rb");
-	/*if(configFile)
+	if(configFile)
 	{
 		readFromConfig(configFile);
 		fclose(configFile);
 	}
-	else
+	/*else
 	{
 		G_fireKey = SDL_SCANCODE_I;
 		G_polarityKey = SDL_SCANCODE_O;
@@ -125,15 +129,6 @@ int main(int argc, char **argv)
 		G_rightKey = SDL_SCANCODE_D;
 		G_upKey = SDL_SCANCODE_W;
 	}*/
-	
-	G_fireKey 		= SDL_CONTROLLER_BUTTON_A;
-	G_polarityKey 	= SDL_CONTROLLER_BUTTON_X;
-	G_fragmentKey 	= SDL_CONTROLLER_BUTTON_Y;
-	G_pauseKey 		= SDL_CONTROLLER_BUTTON_START;
-	G_upKey 		= SDL_CONTROLLER_BUTTON_DPAD_UP;
-	G_downKey 		= SDL_CONTROLLER_BUTTON_DPAD_DOWN;
-	G_leftKey 		= SDL_CONTROLLER_BUTTON_DPAD_LEFT;
-	G_rightKey 		= SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
 	
 	G_particles = new Particles;
 	DC = new DrawingCandidates;
@@ -155,7 +150,8 @@ int main(int argc, char **argv)
 
 	while(!donePlaying)
 	{
-		const Uint8 *keys = SDL_GetKeyboardState(NULL);
+		sceCtrlPeekBufferPositive(0, &pad, 1);
+		//const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
 		drawSprite(image_entries[image_LUT_titleScreen], 0, 0, 0, 0);
 		if(!openedMenu)
@@ -165,9 +161,11 @@ int main(int argc, char **argv)
 			if(blink % 1024 < 512)
 				drawString(&x, &y, x, string_title, 0, 0xffff);
 			blink++;
-			if(isKeyPressed(SDL_SCANCODE_RETURN))
+			//if(isKeyPressed(SDL_CONTROLLER_BUTTON_START))
+			if(pad.buttons & SCE_CTRL_START && !sharedData.blockStart)
 			{
-				wait_no_key_pressed(SDL_SCANCODE_RETURN);
+				//wait_no_key_pressed(SDL_CONTROLLER_BUTTON_START);
+				sharedData.blockStart = true;
 				openedMenu = true;
 			}
 		}
@@ -187,11 +185,11 @@ int main(int argc, char **argv)
 			items[2].labels = string_bools;
 			items[2].labelsNb = 2;
 			Menu m(4, items[0], items[1], items[2], items[3]);
-			choice = m.run();
+			choice = m.run(pad.buttons);
 			if (choice == -1) donePlaying = true;
 			else if (choice == 3)
 			{
-				wait_no_key_pressed(SDL_SCANCODE_RETURN);
+				//wait_no_key_pressed(SDL_CONTROLLER_BUTTON_START);
 				clearBufferB();
 				int x = 0, y = 0;
 				drawString(&x, &y, 0, "Press the key you want to bind to this\naction.\n\n", 0xffff, 0);
@@ -200,8 +198,8 @@ int main(int argc, char **argv)
 				{
 					drawString(&x, &y, 0, string_keys[i], 0xffff, 0);
 					updateScreen();
-					while (!get_key_pressed(customKeys[i])) updateKeys();
-					wait_no_key_pressed(*(customKeys[i]));
+					//while (!isKeyPressed(customKeys[i])) updateKeys();
+					//wait_no_key_pressed(customKeys[i]);
 				}
 				configFile = fopen(string_nKaruga_config, "wb");
 				if (configFile)
@@ -232,7 +230,15 @@ int main(int argc, char **argv)
 		}
 		updateScreen();
 		
-		if(isKeyPressed(SDL_SCANCODE_ESCAPE))
+		if (pad.buttons != SCE_CTRL_CROSS) 		sharedData.blockCross 	= false;
+		if (pad.buttons != SCE_CTRL_CIRCLE) 	sharedData.blockCircle 	= false;
+        if (pad.buttons != SCE_CTRL_SQUARE) 	sharedData.blockSquare 	= false;
+        if (pad.buttons != SCE_CTRL_TRIANGLE) 	sharedData.blockCircle 	= false;
+        if (pad.buttons != SCE_CTRL_LTRIGGER) 	sharedData.blockCircle 	= false;
+        if (pad.buttons != SCE_CTRL_RTRIGGER) 	sharedData.blockCircle 	= false;
+        if (pad.buttons != SCE_CTRL_START) 		sharedData.blockCircle 	= false;
+		
+		if (pad.buttons & SCE_CTRL_SELECT)
 			donePlaying = true;
 	}
 	
@@ -243,6 +249,7 @@ int main(int argc, char **argv)
 	deinitExplosionEngine();
 	deinitBuffering();
 	
+	sceKernelExitProcess(0);
 	return 0;
 }
 
@@ -262,7 +269,8 @@ void bossIntroDone(int channel)
 
 void playGame()
 {
-	KeyEvent kEv = 0;
+	//KeyEvent kEv = 0;
+	int ctrl_state = 0;
 	int pauseTimer = 0;
 	int x = 0, y = 0;
 	
@@ -310,20 +318,23 @@ void playGame()
 	G_minX = 0;
 	G_maxX = 320;
 
-	while(!KQUIT(kEv) && !Level::gameEnded)
+	//while(!isKeyPressed(SDL_CONTROLLER_BUTTON_LEFTSHOULDER) && !Level::gameEnded)
+	while(pad.buttons != SCE_CTRL_LTRIGGER && !Level::gameEnded)
 	{
 		G_gpTimer++;
 		Level::waveTimer++;
 		
 		Level::enemiesArray->handle();
 		
-		kEv = getk();
+		//kEv = getk();
 		
 		// Prevent movement and firing during transitions
 		if(Level::phase == PHASE_TRANSITION)
-			kEv = 0;
+			ctrl_state = 0;
+			//kEv = 0;
 		
-		Level::p->handle(kEv);
+		//Level::p->handle(kEv);
+		Level::p->handle(pad.buttons);
 		
 		Level::bArray->handle();
 		
@@ -379,9 +390,11 @@ void playGame()
 			updateScreen();
 			while(!hasPressed)
 			{
-				updateKeys();
-				if(isKeyPressed(SDL_SCANCODE_RETURN))
+				//updateKeys();
+				//if(isKeyPressed(SDL_CONTROLLER_BUTTON_START))
+				if(pad.buttons & SCE_CTRL_START && !sharedData.blockStart)
 				{
+					sharedData.blockStart = true;
 					hasPressed = true;
 					// - initialise a new ship
 					Level::p->reset();
@@ -398,11 +411,13 @@ void playGame()
 					G_maxChain = 0; // I know that this one hurts but it has to be done ;_;
 					// - DO NOT RESET DOT EATER ACHIEVEMENT
 				}
-				else if(isKeyPressed(SDL_SCANCODE_ESCAPE))
+				//else if(isKeyPressed(SDL_CONTROLLER_BUTTON_LEFTSHOULDER))
+				else if(pad.buttons & SCE_CTRL_LTRIGGER && !sharedData.blockLTrigger)
 				{
+					sharedData.blockLTrigger = true;
 					hasPressed = true;
 					Level::gameEnded = 1;
-					wait_no_key_pressed(SDL_SCANCODE_ESCAPE);
+					//wait_no_key_pressed(SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
 				}
 			}
 		}
@@ -490,8 +505,9 @@ void playGame()
 					if (!G_hasFiredOnce)
 						drawString(&statsRect.x, &statsRect.y, statsRect.x, "Dot eater !", 0xffff, 0);
 				}
-				if (G_gpTimer > 192 && KFIRE(kEv))
+				if (G_gpTimer > 192 && pad.buttons & SCE_CTRL_CROSS && !sharedData.blockCross)
 				{
+					sharedData.blockCross = true;
 					G_maxChain = 0;
 					Level::phase = PHASE_GAME;
 				}
@@ -524,11 +540,13 @@ void playGame()
 
 		if (!pauseTimer)
 		{
-			if (KPAUSE(kEv))
+			//if (KPAUSE(kEv))
+			//if (isKeyPressed(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER))
+			if (pad.buttons & SCE_CTRL_SELECT)
 			{
 				Level::soundSystem->setPausedBgMusic(true);
 				// Pause the game until another pauseKey is pressed
-				wait_no_key_pressed(G_pauseKey);
+				//wait_no_key_pressed(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
 
 				// Display a "paused" box. It will be cleared in the next frame.
 				int x = (320 - stringWidth("Paused")) / 2, y = 116;
@@ -540,17 +558,18 @@ void playGame()
 				drawString(&x, &y, 0, "Paused", 0, 0xffff);
 				updateScreen();
 
-				while (!isKeyPressed(G_pauseKey))
+				while (pad.buttons != SCE_CTRL_SELECT)
 				{
-					updateKeys();
+					//updateKeys();
 					constrainFrameRate(10);
-					if (isKeyPressed(SDL_SCANCODE_ESCAPE))
+					if (pad.buttons & SCE_CTRL_LTRIGGER)
 					{
-						kEv = 128; // KQUIT
+						//kEv = 128; // KQUIT
+						ctrl_state = 128; // KQUIT
 						break;
 					}
 				}
-				wait_no_key_pressed(G_pauseKey);
+				//wait_no_key_pressed(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
 				pauseTimer = 5;
 				Level::soundSystem->setPausedBgMusic(false);
 			}

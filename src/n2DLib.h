@@ -35,7 +35,7 @@ typedef struct
 	int w;
 } Rect;
 
-typedef Uint8 t_key;
+//typedef Uint8 t_key;
 #define itofix(x) ((x) << 8)
 #define fixtoi(x) ((x) >> 8)
 #define fixdiv(x, y) (((x) << 8) / (y))
@@ -65,6 +65,7 @@ extern void updateKeys();
 extern void deinitBuffering();
 extern void timer_load(unsigned, Uint32);
 extern Uint32 timer_read(unsigned);
+//extern Uint8 isKeyPressed2(SDL_GameControllerButton button);
 extern void clearBufferB();
 extern void clearBufferW();
 extern void clearBuffer(unsigned short);
@@ -90,9 +91,9 @@ extern void drawChar(int*, int*, int, char, unsigned short, unsigned short);
 extern void drawStringF(int*, int*, int, unsigned short, unsigned short, const char*, ...);
 extern int numberWidth(int);
 extern int stringWidth(const char*);
-extern void wait_no_key_pressed(t_key);
-extern int get_key_pressed(t_key*);
-extern int isKey(t_key, t_key);
+//extern void wait_no_key_pressed(SDL_GameControllerButton);
+//extern SDL_GameControllerButton get_key_pressed(SDL_GameControllerButton*);
+//extern int isKey(SDL_GameControllerButton, SDL_GameControllerButton);
 
 extern unsigned short * loadBMP(const char*, unsigned short);
 
@@ -101,7 +102,7 @@ extern unsigned short *BUFF_BASE_ADDRESS;
 extern SDL_Texture *MAIN_SCREEN;
 
 // Global key state
-extern const t_key *G_keys;
+//extern const t_key *G_keys;
 #ifdef __cplusplus
 }
 #endif

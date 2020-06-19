@@ -29,7 +29,8 @@ Player::~Player()
 {
 }
 
-void Player::handle(KeyEvent kEv)
+//void Player::handle(KeyEvent kEv)
+void Player::handle(int button)
 {
 	static Rect r, temp;
 	
@@ -59,10 +60,18 @@ void Player::handle(KeyEvent kEv)
 		}
 		
 		// And then only, player input
-		if(KDOWN(kEv)) y += itofix(2);
+		if(button & SCE_CTRL_DOWN) y += itofix(2);
+		if(button & SCE_CTRL_LEFT) x -= itofix(2);
+		if(button & SCE_CTRL_RIGHT) x += itofix(2);
+		if(button & SCE_CTRL_UP) y -= itofix(2);
+		/*if(isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN)) y += itofix(2);
+		if(isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT)) x -= itofix(2);
+		if(isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) x += itofix(2);
+		if(isKeyPressed(SDL_CONTROLLER_BUTTON_DPAD_UP)) y -= itofix(2);*/
+		/*if(KDOWN(kEv)) y += itofix(2);
 		if(KLEFT(kEv)) x -= itofix(2);
 		if(KRIGHT(kEv)) x += itofix(2);
-		if(KUP(kEv)) y -= itofix(2);
+		if(KUP(kEv)) y -= itofix(2);*/
 			
 		r.x = fixtoi(x) - (img[(isSwitchingPolarity / 8) * 2][0] / 2);
 		r.y = fixtoi(y) - (img[(isSwitchingPolarity / 8) * 2][1] / 2);
@@ -73,7 +82,9 @@ void Player::handle(KeyEvent kEv)
 		x = r.x < G_minX ? itofix(G_minX + temp.x) : (r.x > G_maxX - (temp.x * 2) ? itofix(G_maxX - temp.x) : x);
 		y = r.y < 0 ? itofix(temp.y) : (r.y > 240 - (temp.y * 2) ? itofix(240 - temp.y) : y);
 		
-		if(KPOLARITY(kEv))
+		//if(KPOLARITY(kEv))
+		//if(isKeyPressed(SDL_CONTROLLER_BUTTON_X))
+		if(button & SCE_CTRL_SQUARE)
 		{
 			if (!polarityRepeat)
 			{
@@ -85,7 +96,8 @@ void Player::handle(KeyEvent kEv)
 		else
 			polarityRepeat = false;
 		
-		if(KPOWER(kEv))
+		//if(KPOWER(kEv))
+		if(button & SCE_CTRL_TRIANGLE)
 		{
 			if(G_power > 9)
 			{
@@ -97,7 +109,8 @@ void Player::handle(KeyEvent kEv)
 			}
 		}
 		
-		if(KFIRE(kEv))
+		//if(KFIRE(kEv))
+		if(button & SCE_CTRL_CROSS)
 		{
 			if(!fireDelay)
 			{
