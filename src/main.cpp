@@ -1,4 +1,8 @@
 #include "common.h"
+
+#include <psp2/kernel/processmgr.h>
+#include <psp2/power.h> 
+
 #include "ExplosionEffect.h"
 #include "levels.h" 
 #include "gfx/kanji.h"
@@ -87,6 +91,12 @@ inline void readFromConfig(FILE* in)
 
 int main(int argc, char **argv)
 {
+	
+	scePowerSetArmClockFrequency(444);
+    scePowerSetGpuClockFrequency(222);
+    scePowerSetBusClockFrequency(222);
+    scePowerSetGpuXbarClockFrequency(222);
+	
 	UNUSED(argc);
 	UNUSED(argv);
 
@@ -99,7 +109,7 @@ int main(int argc, char **argv)
 	int choice = 0;
 	
 	configFile = fopen(string_nKaruga_config, "rb");
-	if(configFile)
+	/*if(configFile)
 	{
 		readFromConfig(configFile);
 		fclose(configFile);
@@ -114,7 +124,16 @@ int main(int argc, char **argv)
 		G_leftKey = SDL_SCANCODE_A;
 		G_rightKey = SDL_SCANCODE_D;
 		G_upKey = SDL_SCANCODE_W;
-	}
+	}*/
+	
+	G_fireKey 		= SDL_CONTROLLER_BUTTON_A;
+	G_polarityKey 	= SDL_CONTROLLER_BUTTON_X;
+	G_fragmentKey 	= SDL_CONTROLLER_BUTTON_Y;
+	G_pauseKey 		= SDL_CONTROLLER_BUTTON_START;
+	G_upKey 		= SDL_CONTROLLER_BUTTON_DPAD_UP;
+	G_downKey 		= SDL_CONTROLLER_BUTTON_DPAD_DOWN;
+	G_leftKey 		= SDL_CONTROLLER_BUTTON_DPAD_LEFT;
+	G_rightKey 		= SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
 	
 	G_particles = new Particles;
 	DC = new DrawingCandidates;

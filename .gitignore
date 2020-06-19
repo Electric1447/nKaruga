@@ -9,3 +9,8 @@ Makefile
 *.db
 /.Rhistory
 /.directory
+*.velf
+*.self
+*.out
+*.sfo
+*.vpk

@@ -8,22 +8,29 @@ extern "C" {
 /*             *
  *  Buffering  *
  *             */
+ 
+#define SCREEN_WIDTH  960
+#define SCREEN_HEIGHT 544
+
 
 unsigned short *BUFF_BASE_ADDRESS;
-SDL_Window *sdlWindow;
-SDL_Renderer *sdlRenderer;
+SDL_Window *sdlWindow = NULL;
+SDL_Renderer *sdlRenderer = NULL;
 SDL_Texture *MAIN_SCREEN;
 
 Uint32 baseFPS;
 
 void initBuffering()
 {
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 	
 	// This fixes the fullscreen/resize crash, see line 97
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+	//SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	
-	SDL_CreateWindowAndRenderer(320 * 2, 240 * 2, SDL_WINDOW_BORDERLESS, &sdlWindow, &sdlRenderer);
+	//SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN, &sdlWindow, &sdlRenderer);
+	sdlWindow = SDL_CreateWindow("nKaruga", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
+	sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+	
 	SDL_RenderSetLogicalSize(sdlRenderer, 320, 240);
 	if(!sdlWindow || !sdlRenderer)
 	{

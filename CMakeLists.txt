@@ -33,8 +33,8 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-	SDL2
 	SDL2_mixer
+	SDL2
 	vita2d
 	SceDisplay_stub
 	SceCtrl_stub
@@ -42,6 +42,7 @@ target_link_libraries(${PROJECT_NAME}
 	SceSysmodule_stub
 	SceGxm_stub
 	SceCommonDialog_stub
+	ScePower_stub
 	SceTouch_stub
 	SceHid_stub
   	m
@@ -50,13 +51,41 @@ target_link_libraries(${PROJECT_NAME}
 	mpg123
 	FLAC
 	mikmod
-	ogg
-	vorbis
 	vorbisfile
+	vorbis
+	ogg
 )
 
 vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
 vita_create_vpk(${PROJECT_NAME}.vpk ${VITA_TITLEID} ${PROJECT_NAME}.self
-  VERSION ${VITA_VERSION}
-  NAME ${VITA_APP_NAME}
+	VERSION ${VITA_VERSION}
+	NAME ${VITA_APP_NAME}
+
+	FILE sfx/bullet/fire_enemy_0.wav resources/sfx/bullet/fire_enemy_0.wav
+	FILE sfx/bullet/fire_enemy_1.wav resources/sfx/bullet/fire_enemy_1.wav
+	FILE sfx/bullet/fire_enemy_2.wav resources/sfx/bullet/fire_enemy_2.wav
+	FILE sfx/bullet/fire_enemy_homing.wav resources/sfx/bullet/fire_enemy_homing.wav
+	FILE sfx/bullet/fire_player_bullet.wav resources/sfx/bullet/fire_player_bullet.wav
+	FILE sfx/bullet/fire_fragment.wav resources/sfx/bullet/fire_fragment.wav
+	FILE sfx/bullet/impact.wav resources/sfx/bullet/impact.wav
+	FILE sfx/enemy/explosion_big.wav resources/sfx/enemy/explosion_big.wav
+	FILE sfx/enemy/explosion_small.wav resources/sfx/enemy/explosion_small.wav
+	FILE sfx/enemy/laser_charge.wav resources/sfx/enemy/laser_charge.wav
+	FILE sfx/enemy/laser_release.wav resources/sfx/enemy/laser_release.wav
+	FILE sfx/player/chain.wav resources/sfx/player/chain.wav
+	FILE sfx/player/death.wav resources/sfx/player/death.wav
+	FILE sfx/player/switch.wav resources/sfx/player/switch.wav
+	
+	FILE sfx/menu/accept.wav resources/sfx/menu/accept.wav
+	FILE sfx/menu/back.wav resources/sfx/menu/back.wav
+	FILE sfx/menu/cursor.wav resources/sfx/menu/cursor.wav
+	FILE sfx/menu/select.wav resources/sfx/menu/select.wav
+	FILE sfx/menu/start.wav resources/sfx/menu/start.wav
+	FILE sfx/boss_alert.wav resources/sfx/boss_alert.wav
+	
+	FILE sfx/music/Ideal_main.ogg resources/sfx/music/Ideal_main.ogg
+	FILE sfx/music/Ideal_loop.ogg resources/sfx/music/Ideal_loop.ogg
+	FILE sfx/music/Butsutekkai.ogg resources/sfx/music/Butsutekkai.ogg
+	FILE sfx/music/Trial_main.ogg resources/sfx/music/Trial_main.ogg
+	FILE sfx/music/Trial_loop.ogg resources/sfx/music/Trial_loop.ogg
 )
