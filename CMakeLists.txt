@@ -49,12 +49,10 @@ target_link_libraries(${PROJECT_NAME}
 	c
 	mpg123
 	FLAC
-	vorbis
-	vorbisenc
-	vorbisfile
-	vorbisidec
 	mikmod
 	ogg
+	vorbis
+	vorbisfile
 )
 
 vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
