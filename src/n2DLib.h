@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL2/SDL.h>
-
+/*
 #if defined(__cplusplus) && !defined(min) && !defined(max)
 inline int min(int a, int b)
 {
@@ -18,6 +18,10 @@ inline int max(int a, int b)
 	return a > b ? a : b;
 }
 #endif
+*/
+
+#define min(x,y) x < y ? x : y
+#define max(x,y) x > y ? x : y
 
 #define MAX_TIMER 2
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef INCLUDE_COMMON
 #define INCLUDE_COMMON
 

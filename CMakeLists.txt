@@ -53,6 +53,8 @@ target_link_libraries(${PROJECT_NAME}
 	vorbisenc
 	vorbisfile
 	vorbisidec
+	mikmod
+	ogg
 )
 
 vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
