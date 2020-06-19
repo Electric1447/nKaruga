@@ -80,7 +80,7 @@ void displayFrameRate()
 
 void updateScreen()
 {
-	static int toggled = 0;
+	//static int toggled = 0;
 	int di;
 	uint8_t *pixels;
 	uint8_t *buf = (uint8_t*)BUFF_BASE_ADDRESS;
@@ -89,7 +89,7 @@ void updateScreen()
 	for (di = 0; di < 320 * 240 * sizeof(unsigned short); di += sizeof(unsigned int))
 		*(unsigned int*)(pixels + di) = *(unsigned int*)(buf + di);
 	SDL_UnlockTexture(MAIN_SCREEN);
-	
+	/*
 	if(G_keys[SDL_SCANCODE_F])
 	{
 		if(!toggled)
@@ -100,6 +100,7 @@ void updateScreen()
 	}
 	else
 		toggled = 0;
+	*/
 	
 	SDL_RenderCopy(sdlRenderer, MAIN_SCREEN, NULL, NULL);
 	SDL_RenderPresent(sdlRenderer);
