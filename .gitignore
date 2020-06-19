@@ -2,6 +2,10 @@ bin/*
 ost
 releases
 screenshots
+CMakeFiles
+*.cmake
+CMakeCache.txt
+Makefile
 *.db
 /.Rhistory
 /.directory

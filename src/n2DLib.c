@@ -41,6 +41,7 @@ void initBuffering()
 	SDL_PumpEvents();
 	G_keys = SDL_GetKeyboardState(NULL);
 }
+/*
 void toggleFullscreen()
 {
 	if(SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_MAXIMIZED)
@@ -48,7 +49,7 @@ void toggleFullscreen()
 	else
 		SDL_MaximizeWindow(sdlWindow);
 }
-
+*/
 void constrainFrameRate(int fps)
 {
 	static Uint32 secondCount = 1001, secondBase = 0, FPScount = 0, FPSdisp = 0;

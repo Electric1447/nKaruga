@@ -1,10 +1,12 @@
+#pragma once
+
 #ifndef INCLUDE_GRAFX
 #define INCLUDE_GRAFX
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #if defined(__cplusplus) && !defined(min) && !defined(max)
 inline int min(int a, int b)
@@ -58,7 +60,7 @@ extern void updateScreen();
 extern void updateKeys();
 extern void deinitBuffering();
 extern void timer_load(unsigned, Uint32);
-extern unsigned timer_read(unsigned);
+extern Uint32 timer_read(unsigned);
 extern void clearBufferB();
 extern void clearBufferW();
 extern void clearBuffer(unsigned short);
