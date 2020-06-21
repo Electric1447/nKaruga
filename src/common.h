@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef INCLUDE_COMMON
 #define INCLUDE_COMMON
 
@@ -11,8 +9,6 @@
 #include <vector>
 #include <stack>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL.h>
-#include <psp2/ctrl.h>
 
 #include "n2DLib.h"
 
@@ -282,8 +278,7 @@ public:
 	Player();
 	~Player();
 	void reset();
-	//void handle(KeyEvent k);
-	void handle(int button);
+	void handle(KeyEvent k);
 	bool getPolarity();
 	void switchPolarity();
 	void hurt();
@@ -635,7 +630,7 @@ public:
 	Menu(int num, ...);
 	~Menu();
 	// Returns the index of the chosen option, or -1 if the menu was exitted
-	int run(int button);
+	int run();
 private:
 	std::vector<char*> options;
 	std::vector<void*> values;
@@ -1135,7 +1130,7 @@ extern bool G_hasFiredOnce;
 extern int G_bossIntroChannel;
 
 // Custom keys
-//extern t_key G_downKey, G_leftKey, G_rightKey, G_upKey, G_fireKey, G_polarityKey, G_fragmentKey, G_pauseKey;
+extern t_key G_downKey, G_leftKey, G_rightKey, G_upKey, G_fireKey, G_polarityKey, G_fragmentKey, G_pauseKey;
 
 // Utils
 extern Enemy* findNearestEnemy(Fixed x, Fixed y);
@@ -1146,6 +1141,6 @@ extern int iToScreenY(int y, int camRel);
 extern Fixed fToScreenX(Fixed x, int camRel);
 extern Fixed fToScreenY(Fixed y, int camRel);
 extern BossData createBossData(int bossID);
-//extern Uint8 isKeyPressed(SDL_GameControllerButton button);
+extern int isKeyPressed(t_key);
 
 #endif

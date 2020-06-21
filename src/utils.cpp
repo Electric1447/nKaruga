@@ -57,19 +57,11 @@ bool collidePointRect(Fixed px, Fixed py, Fixed x, Fixed y, int w, int h)
 	return px >= x - itofix(w) / 2 && px < x + itofix(w) / 2 && py >= y - itofix(h) / 2 && py < y + itofix(h) / 2;
 }
 
-/*int isKeyPressed(t_key _k)
+int isKeyPressed(t_key _k)
 {
 	return G_keys[_k];
-}*/
-/*
-Uint8 isKeyPressed(SDL_GameControllerButton button)
-{
-	return isKeyPressed2(button);
 }
-*/
 
-
-/*
 KeyEvent getk(void)
 {
 	static KeyEvent k;
@@ -79,7 +71,7 @@ KeyEvent getk(void)
 	k <<= 4;
 	k |= (((((isKeyPressed(G_upKey) << 1) + isKeyPressed(G_rightKey)) << 1) + isKeyPressed(G_leftKey)) << 1) + isKeyPressed(G_downKey);
 	return k;
-}*/
+}
 
 int iToScreenX(int x, int camRel)
 {
